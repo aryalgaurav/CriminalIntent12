@@ -15,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -51,7 +52,7 @@ public class CrimeFragment extends Fragment {
 		mDateButton = (Button) view.findViewById(R.id.crime_date);
         mTimeButton = (Button) view.findViewById(R.id.crime_time);
         updateDate();
-        //updateTime();
+        updateTime();
 
         mDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,7 +122,7 @@ public class CrimeFragment extends Fragment {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCrime.setDate(date);
             updateDate();
-            //updateTime();
+            updateTime();
         }
     }
 
@@ -132,8 +133,10 @@ public class CrimeFragment extends Fragment {
     private void updateTime() {
         Calendar calendar = new GregorianCalendar().getInstance();
         calendar.setTime(mCrime.getDate());
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minutes = calendar.get(Calendar.MINUTE);
-        mTimeButton.setText(hour +":" + minutes);
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
+        simpleDateFormat.setCalendar(calendar);
+        String formattedDate = simpleDateFormat.format(calendar.getTime());
+        mTimeButton.setText(formattedDate);
     }
 }
