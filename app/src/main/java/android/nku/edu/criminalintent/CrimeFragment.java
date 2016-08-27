@@ -27,6 +27,7 @@ public class CrimeFragment extends Fragment {
 
     public final static String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "DialogDate";
+    private static final String DIALOG_TIME = "DialogTime";
     private static final int REQUEST_CODE = 0;
 
     private Crime mCrime;
@@ -49,7 +50,8 @@ public class CrimeFragment extends Fragment {
 		
 		mDateButton = (Button) view.findViewById(R.id.crime_date);
         mTimeButton = (Button) view.findViewById(R.id.crime_time);
-        updateDateAndTime();
+        updateDate();
+        //updateTime();
 
         mDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +67,9 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getFragmentManager();
+                TimePickerFragment dialog = TimePickerFragment.newInstance(mCrime.getDate());
+                dialog.setTargetFragment(CrimeFragment.this, REQUEST_CODE);
+                dialog.show(fragmentManager, DIALOG_TIME);
 
             }
         });
@@ -115,12 +120,16 @@ public class CrimeFragment extends Fragment {
         if (requestCode == REQUEST_CODE) {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCrime.setDate(date);
-            updateDateAndTime();
+            updateDate();
+            //updateTime();
         }
     }
 
-    private void updateDateAndTime() {
+    private void updateDate() {
         mDateButton.setText(mCrime.getDate().toString());
+    }
+
+    private void updateTime() {
         Calendar calendar = new GregorianCalendar().getInstance();
         calendar.setTime(mCrime.getDate());
         int hour = calendar.get(Calendar.HOUR_OF_DAY);

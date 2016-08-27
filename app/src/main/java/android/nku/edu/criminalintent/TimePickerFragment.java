@@ -49,7 +49,7 @@ public class TimePickerFragment extends DialogFragment {
                         int hours = mTimePicker.getCurrentHour();
                         int minutes = mTimePicker.getCurrentMinute();
                         Date date = new GregorianCalendar(0, 0, 0, hours, minutes).getTime();
-                        sendResult(Activity.RESULT_OK, date);
+                        //sendResult(Activity.RESULT_OK, date);
                     }
                 }).create();
     }
