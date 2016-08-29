@@ -22,24 +22,25 @@ import java.util.GregorianCalendar;
 public class DatePickerFragment extends DialogFragment {
 
     public static final String EXTRA_DATE = "android.nku.edu.criminalintent.date";
-
     private static final String ARG_DATE = "date";
     private DatePicker mDatePicker;
+    private Calendar mCalendar;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         Date date = (Date) getArguments().getSerializable(ARG_DATE);
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        mCalendar = Calendar.getInstance();
+        mCalendar.setTime(date);
 
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_date, null);
-
         mDatePicker = (DatePicker) view.findViewById(R.id.dialog_date_date_picker);
-        mDatePicker.init(year, month, day, null);
+        mDatePicker.init(
+                mCalendar.get(Calendar.YEAR),
+                mCalendar.get(Calendar.MONTH),
+                mCalendar.get(Calendar.DAY_OF_MONTH),
+                null);
 
         return new AlertDialog.Builder(getActivity()).setView(view)
                 .setTitle(R.string.date_picker_title)
@@ -50,7 +51,11 @@ public class DatePickerFragment extends DialogFragment {
                         int year = mDatePicker.getYear();
                         int month = mDatePicker.getMonth();
                         int day = mDatePicker.getDayOfMonth();
-                        Date date = new GregorianCalendar(year, month, day).getTime();
+
+                        int hour = mCalendar.get(Calendar.HOUR_OF_DAY);
+                        int minute = mCalendar.get(Calendar.MINUTE);
+
+                        Date date = new GregorianCalendar(year, month, day, hour, minute).getTime();
                         sendResult(Activity.RESULT_OK, date);
                     }
                 }).create();
